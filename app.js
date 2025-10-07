@@ -42,10 +42,21 @@ class StudyPlanner {
         this.currentMonth = new Date(2025, 9); // October 2025
         this.currentTaskId = null;
         this.storageKey = 'studyPlannerState';
+        this.auth = {
+            storageKey: 'studyPlannerAuthUser',
+            sessionKey: 'studyPlannerAuthSession',
+            allowedUsers: {
+                'admin': 'fc21b9f63e0a604384f9371bdfc1b5a9184c9ac383713d71368b57592f09806b'
+            }
+        };
+        this.isAuthenticated = false;
+        this.currentUser = null;
 
         this.loadState();
+        this.initializeAuth();
 
         this.init();
+        this.updateAuthUI();
     }
 
     init() {
@@ -97,6 +108,36 @@ class StudyPlanner {
                 this.filterTasks();
             });
         });
+
+        const loginButton = document.getElementById('loginButton');
+        if (loginButton) {
+            loginButton.addEventListener('click', () => {
+                if (this.isAuthenticated) {
+                    this.logout();
+                } else {
+                    this.showAuthOverlay();
+                }
+            });
+        }
+
+        const authForm = document.getElementById('authForm');
+        if (authForm) {
+            authForm.addEventListener('submit', (event) => this.handleAuthSubmit(event));
+        }
+
+        const authCancel = document.getElementById('authCancel');
+        if (authCancel) {
+            authCancel.addEventListener('click', () => this.hideAuthOverlay());
+        }
+
+        const authOverlay = document.getElementById('authOverlay');
+        if (authOverlay) {
+            authOverlay.addEventListener('click', (event) => {
+                if (event.target === authOverlay) {
+                    this.hideAuthOverlay();
+                }
+            });
+        }
     }
 
     showView(viewName) {
@@ -526,6 +567,11 @@ class StudyPlanner {
     }
 
     openTaskModal(task) {
+        if (!this.isAuthenticated) {
+            this.showAuthOverlay();
+            return;
+        }
+
         this.currentTaskId = task.id;
         
         document.getElementById('modalTitle').textContent = `${task.subject} - ${task.task}`;
@@ -548,6 +594,11 @@ class StudyPlanner {
     }
 
     saveTask() {
+        if (!this.isAuthenticated) {
+            this.showAuthOverlay();
+            return;
+        }
+
         if (!this.currentTaskId) return;
         
         const task = this.tasks.find(t => t.id === this.currentTaskId);
@@ -571,6 +622,176 @@ class StudyPlanner {
         } else if (this.currentView === 'progress') {
             this.renderProgressCharts();
         }
+    }
+
+    initializeAuth() {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        try {
+            const sessionData = window.sessionStorage?.getItem(this.auth.sessionKey);
+            const persistentData = window.localStorage?.getItem(this.auth.storageKey);
+            const rawData = sessionData || persistentData;
+
+            if (!rawData) {
+                return;
+            }
+
+            const parsed = JSON.parse(rawData);
+            const username = parsed?.username?.toLowerCase();
+
+            if (username && this.auth.allowedUsers[username]) {
+                this.isAuthenticated = true;
+                this.currentUser = username;
+                window.sessionStorage.setItem(this.auth.sessionKey, JSON.stringify({ username }));
+                if (persistentData) {
+                    window.localStorage.setItem(this.auth.storageKey, JSON.stringify({ username }));
+                }
+            }
+        } catch (error) {
+            console.error('Failed to initialize auth:', error);
+            this.isAuthenticated = false;
+            this.currentUser = null;
+            window.sessionStorage?.removeItem(this.auth.sessionKey);
+        }
+    }
+
+    updateAuthUI() {
+        const loginButton = document.getElementById('loginButton');
+        if (loginButton) {
+            loginButton.classList.remove('btn--outline', 'btn--primary');
+            loginButton.classList.add('btn');
+
+            if (this.isAuthenticated) {
+                loginButton.textContent = '🔓 Выйти';
+                loginButton.classList.add('btn--primary');
+            } else {
+                loginButton.textContent = '🔒 Войти';
+                loginButton.classList.add('btn--outline');
+            }
+        }
+
+        if (!this.isAuthenticated) {
+            this.closeModal();
+        }
+    }
+
+    showAuthOverlay() {
+        const overlay = document.getElementById('authOverlay');
+        const errorElement = document.getElementById('authError');
+        const loginInput = document.getElementById('authLogin');
+        const passwordInput = document.getElementById('authPassword');
+
+        if (overlay) {
+            overlay.classList.remove('hidden');
+        }
+        if (errorElement) {
+            errorElement.classList.add('hidden');
+        }
+        if (passwordInput) {
+            passwordInput.value = '';
+        }
+        if (loginInput && !loginInput.value) {
+            loginInput.focus();
+        }
+    }
+
+    hideAuthOverlay() {
+        const overlay = document.getElementById('authOverlay');
+        const passwordInput = document.getElementById('authPassword');
+
+        if (overlay) {
+            overlay.classList.add('hidden');
+        }
+        if (passwordInput) {
+            passwordInput.value = '';
+        }
+    }
+
+    async handleAuthSubmit(event) {
+        event.preventDefault();
+
+        const loginInput = document.getElementById('authLogin');
+        const passwordInput = document.getElementById('authPassword');
+        const rememberCheckbox = document.getElementById('authRemember');
+        const errorElement = document.getElementById('authError');
+
+        if (!loginInput || !passwordInput) {
+            return;
+        }
+
+        const login = loginInput.value.trim().toLowerCase();
+        const password = passwordInput.value;
+        const remember = rememberCheckbox ? rememberCheckbox.checked : false;
+
+        const success = await this.attemptLogin(login, password, remember);
+
+        if (success) {
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+            }
+            this.hideAuthOverlay();
+            this.updateAuthUI();
+        } else if (errorElement) {
+            errorElement.classList.remove('hidden');
+        }
+    }
+
+    async attemptLogin(username, password, remember) {
+        if (!username || !password) {
+            return false;
+        }
+
+        const storedHash = this.auth.allowedUsers[username];
+        if (!storedHash) {
+            return false;
+        }
+
+        try {
+            const passwordHash = await this.hashString(password);
+            if (passwordHash !== storedHash) {
+                return false;
+            }
+
+            this.isAuthenticated = true;
+            this.currentUser = username;
+
+            if (typeof window !== 'undefined') {
+                window.sessionStorage?.setItem(this.auth.sessionKey, JSON.stringify({ username }));
+                if (remember) {
+                    window.localStorage?.setItem(this.auth.storageKey, JSON.stringify({ username }));
+                } else {
+                    window.localStorage?.removeItem(this.auth.storageKey);
+                }
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Failed to authenticate user:', error);
+            return false;
+        }
+    }
+
+    async hashString(value) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(value);
+        const buffer = await window.crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(buffer));
+        return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    logout() {
+        this.isAuthenticated = false;
+        this.currentUser = null;
+
+        if (typeof window !== 'undefined') {
+            window.sessionStorage?.removeItem(this.auth.sessionKey);
+            window.localStorage?.removeItem(this.auth.storageKey);
+        }
+
+        this.hideAuthOverlay();
+        this.updateAuthUI();
     }
 
     loadState() {

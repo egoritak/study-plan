@@ -23,6 +23,9 @@
                             <div class="progress-circle__label">Выполнено</div>
                         </div>
                     </div>
+                    <div class="header__actions">
+                        <button class="btn btn--outline" id="loginButton">🔒 Войти</button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -228,6 +231,33 @@
                     <button class="btn btn--outline" id="modalCancel">Отмена</button>
                     <button class="btn btn--primary" id="modalSave">Сохранить</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Authentication Overlay -->
+        <div class="auth-overlay hidden" id="authOverlay" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+            <div class="auth-card">
+                <h2 class="auth-card__title" id="authTitle">Вход</h2>
+                <p class="auth-card__subtitle">Редактирование доступно только после авторизации</p>
+                <form class="auth-form" id="authForm">
+                    <label class="auth-form__field">
+                        <span class="auth-form__label">Логин</span>
+                        <input type="text" id="authLogin" class="form-control" placeholder="admin" autocomplete="username" required>
+                    </label>
+                    <label class="auth-form__field">
+                        <span class="auth-form__label">Пароль</span>
+                        <input type="password" id="authPassword" class="form-control" placeholder="••••••••" autocomplete="current-password" required>
+                    </label>
+                    <label class="auth-form__remember">
+                        <input type="checkbox" id="authRemember" checked>
+                        <span>Запомнить меня на этом устройстве</span>
+                    </label>
+                    <p class="auth-form__error hidden" id="authError">Неверный логин или пароль</p>
+                    <div class="auth-form__actions">
+                        <button type="submit" class="btn btn--primary">Войти</button>
+                        <button type="button" class="btn btn--outline" id="authCancel">Отмена</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
