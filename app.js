@@ -2,29 +2,31 @@
 class StudyPlanner {
     constructor() {
         this.tasks = [
-            {"id": 1, "month": "Октябрь", "subject": "ММФА", "task": "1", "dates": "07.10-08.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 2, "month": "Октябрь", "subject": "ММФА", "task": "2", "dates": "09.10-10.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 3, "month": "Октябрь", "subject": "ММФА", "task": "3", "dates": "13.10-14.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 4, "month": "Октябрь", "subject": "МИИМППР", "task": "1", "dates": "15.10-16.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 5, "month": "Октябрь", "subject": "МИИМППР", "task": "2", "dates": "17.10-20.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 6, "month": "Октябрь", "subject": "КИС", "task": "1", "dates": "21.10-22.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 7, "month": "Октябрь", "subject": "КИС", "task": "2", "dates": "23.10-24.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 8, "month": "Октябрь", "subject": "КИС", "task": "3", "dates": "27.10-28.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 9, "month": "Октябрь", "subject": "СПУПИК", "task": "1", "dates": "29.10-30.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 10, "month": "Ноябрь", "subject": "СПУПИК", "task": "2", "dates": "31.10-03.11", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 11, "month": "Ноябрь", "subject": "СПУПИК", "task": "3", "dates": "04.11-05.11", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 12, "month": "Ноябрь", "subject": "ММФА", "task": "4", "dates": "06.11-10.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 13, "month": "Ноябрь", "subject": "ММФА", "task": "5", "dates": "11.11-13.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 14, "month": "Ноябрь", "subject": "ММФА", "task": "6", "dates": "14.11-18.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 15, "month": "Ноябрь", "subject": "МИИМППР", "task": "3", "dates": "19.11-21.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 16, "month": "Ноябрь", "subject": "МИИМППР", "task": "4", "dates": "24.11-26.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 17, "month": "Декабрь", "subject": "НИРР", "task": "дневник", "dates": "27.11-28.11", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
-            {"id": 18, "month": "Декабрь", "subject": "НИРР", "task": "отчёт", "dates": "01.12-04.12", "difficulty": "Средне", "duration": 4, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 19, "month": "Декабрь", "subject": "Научка", "task": "отчёт", "dates": "05.12-11.12", "difficulty": "Сложно", "duration": 5, "status": "planned", "progress": 0, "notes": "", "color": "#F44336"},
-            {"id": 20, "month": "Декабрь", "subject": "МИИМППР", "task": "5", "dates": "12.12-16.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 21, "month": "Декабрь", "subject": "КИС", "task": "ERP 1", "dates": "17.12-19.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 22, "month": "Декабрь", "subject": "КИС", "task": "ERP 2", "dates": "22.12-24.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
-            {"id": 23, "month": "Декабрь", "subject": "КИС", "task": "ERP 3", "dates": "25.12-29.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"}
+            {"id": 1, "month": "Октябрь", "subject": "ММФА", "task": "1", "dates": "14.10-15.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 2, "month": "Ноябрь", "subject": "ММФА", "task": "2", "dates": "26.10-27.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 3, "month": "Ноябрь", "subject": "ММФА", "task": "3", "dates": "05.11-06.11", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 4, "month": "Октябрь", "subject": "МИИМППР", "task": "1", "dates": "09.10-10.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 5, "month": "Октябрь", "subject": "МИИМППР", "task": "2", "dates": "21.10-22.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 6, "month": "Октябрь", "subject": "КИС", "task": "1", "dates": "07.10-08.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 7, "month": "Октябрь", "subject": "КИС", "task": "2", "dates": "16.10 | 19.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 8, "month": "Ноябрь", "subject": "КИС", "task": "3", "dates": "07.11-08.11", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 9, "month": "Октябрь", "subject": "СПУПИК", "task": "1", "dates": "12.10-13.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 10, "month": "Ноябрь", "subject": "СПУПИК", "task": "2", "dates": "23.10-24.10", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 11, "month": "Ноябрь", "subject": "СПУПИК", "task": "3", "dates": "02.11 | 04.11", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 12, "month": "Декабрь", "subject": "ММФА", "task": "4", "dates": "16.11 | 18.11-19.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 13, "month": "Декабрь", "subject": "ММФА", "task": "5", "dates": "06.12-08.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 14, "month": "Декабрь", "subject": "ММФА", "task": "6", "dates": "24.12 | 26.12 | 28.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 15, "month": "Ноябрь", "subject": "МИИМППР", "task": "3", "dates": "28.10-30.10", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 16, "month": "Ноябрь", "subject": "МИИМППР", "task": "4", "dates": "11.11-13.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 17, "month": "Ноябрь", "subject": "НИРР", "task": "дневник", "dates": "09.11-10.11", "difficulty": "Легко", "duration": 2, "status": "planned", "progress": 0, "notes": "", "color": "#4CAF50"},
+            {"id": 18, "month": "Декабрь", "subject": "НИРР", "task": "отчёт", "dates": "16.12-19.12", "difficulty": "Средне", "duration": 4, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 19, "month": "Декабрь", "subject": "Научка", "task": "отчёт", "dates": "24.11-26.11 | 29.11-30.11 | 02.12", "difficulty": "Сложно", "duration": 6, "status": "planned", "progress": 0, "notes": "", "color": "#F44336"},
+            {"id": 20, "month": "Декабрь", "subject": "МИИМППР", "task": "5", "dates": "03.12-05.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 21, "month": "Декабрь", "subject": "КИС", "task": "ERP 1", "dates": "20.11-21.11 | 23.11", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 22, "month": "Декабрь", "subject": "КИС", "task": "ERP 2", "dates": "10.12 | 13.12-14.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"},
+            {"id": 23, "month": "Декабрь", "subject": "КИС", "task": "ERP 3", "dates": "21.12-23.12", "difficulty": "Средне", "duration": 3, "status": "planned", "progress": 0, "notes": "", "color": "#FF9800"}
+
+
         ];
 
         this.subjects = {
@@ -362,14 +364,21 @@ class StudyPlanner {
 
     getTasksForDate(date) {
         return this.tasks.filter(task => {
-            const [startDate, endDate] = task.dates.split('-');
-            const [startDay, startMonth] = startDate.split('.');
-            const [endDay, endMonth] = endDate.split('.');
-            
-            const taskStartDate = new Date(2025, parseInt(startMonth) - 1, parseInt(startDay));
-            const taskEndDate = new Date(2025, parseInt(endMonth) - 1, parseInt(endDay));
-            
-            return date >= taskStartDate && date <= taskEndDate;
+            const segments = task.dates.split('|').map(segment => segment.trim()).filter(Boolean);
+
+            return segments.some(segment => {
+                const [startPart, endPart] = segment.includes('-')
+                    ? segment.split('-').map(part => part.trim())
+                    : [segment, segment];
+
+                const [startDay, startMonth] = startPart.split('.').map(Number);
+                const [endDay, endMonth] = endPart.split('.').map(Number);
+
+                const segmentStart = new Date(2025, startMonth - 1, startDay);
+                const segmentEnd = new Date(2025, endMonth - 1, endDay);
+
+                return date >= segmentStart && date <= segmentEnd;
+            });
         });
     }
 
