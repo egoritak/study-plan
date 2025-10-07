@@ -39,6 +39,9 @@ class StudyPlanner {
         this.currentView = 'dashboard';
         this.currentMonth = new Date(2025, 9); // October 2025
         this.currentTaskId = null;
+        this.storageKey = 'studyPlannerState';
+
+        this.loadState();
 
         this.init();
     }
@@ -548,15 +551,76 @@ class StudyPlanner {
         task.progress = newProgress;
         task.notes = notes;
         task.status = newProgress === 100 ? 'completed' : 'in_progress';
-        
+
+        this.saveState();
         this.closeModal();
         this.updateDashboard();
-        
+
         // Refresh current view
         if (this.currentView === 'tasks') {
             this.renderTasks();
         } else if (this.currentView === 'progress') {
             this.renderProgressCharts();
+        }
+    }
+
+    loadState() {
+        if (typeof window === 'undefined' || !window.localStorage) {
+            return;
+        }
+
+        try {
+            const rawState = window.localStorage.getItem(this.storageKey);
+            if (!rawState) {
+                return;
+            }
+
+            const parsedState = JSON.parse(rawState);
+            if (!parsedState || !Array.isArray(parsedState.tasks)) {
+                return;
+            }
+
+            parsedState.tasks.forEach(savedTask => {
+                const task = this.tasks.find(t => t.id === savedTask.id);
+                if (!task) {
+                    return;
+                }
+
+                if (typeof savedTask.progress === 'number') {
+                    task.progress = savedTask.progress;
+                }
+
+                if (typeof savedTask.notes === 'string') {
+                    task.notes = savedTask.notes;
+                }
+
+                if (typeof savedTask.status === 'string') {
+                    task.status = savedTask.status;
+                }
+            });
+        } catch (error) {
+            console.error('Failed to load planner state:', error);
+        }
+    }
+
+    saveState() {
+        if (typeof window === 'undefined' || !window.localStorage) {
+            return;
+        }
+
+        try {
+            const payload = {
+                tasks: this.tasks.map(({ id, progress, notes, status }) => ({
+                    id,
+                    progress,
+                    notes,
+                    status
+                }))
+            };
+
+            window.localStorage.setItem(this.storageKey, JSON.stringify(payload));
+        } catch (error) {
+            console.error('Failed to save planner state:', error);
         }
     }
 }
