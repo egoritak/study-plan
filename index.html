@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>План выполнения учебных работ 2025</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header__content">
+                    <div class="header__title">
+                        <h1>📚 План выполнения учебных работ 2025</h1>
+                        <p class="header__date">Сегодня: 7 октября 2025</p>
+                    </div>
+                    <div class="header__progress">
+                        <div class="progress-circle">
+                            <div class="progress-circle__value" id="overallProgress">0%</div>
+                            <div class="progress-circle__label">Выполнено</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="container">
+                <div class="nav__buttons">
+                    <button class="btn btn--primary nav__btn active" data-view="dashboard">📊 Обзор</button>
+                    <button class="btn btn--outline nav__btn" data-view="tasks">📋 Задачи</button>
+                    <button class="btn btn--outline nav__btn" data-view="calendar">📅 Календарь</button>
+                    <button class="btn btn--outline nav__btn" data-view="progress">📈 Прогресс</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- Dashboard View -->
+                <div class="view view--dashboard active" id="dashboardView">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card__icon">📝</div>
+                            <div class="stat-card__content">
+                                <div class="stat-card__value" id="totalTasks">23</div>
+                                <div class="stat-card__label">Всего задач</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card__icon">✅</div>
+                            <div class="stat-card__content">
+                                <div class="stat-card__value" id="completedTasks">0</div>
+                                <div class="stat-card__label">Выполнено</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card__icon">⏰</div>
+                            <div class="stat-card__content">
+                                <div class="stat-card__value" id="remainingDays">84</div>
+                                <div class="stat-card__label">Дней осталось</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card__icon">🎯</div>
+                            <div class="stat-card__content">
+                                <div class="stat-card__value" id="averageProgress">0%</div>
+                                <div class="stat-card__label">Средний прогресс</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Month Progress Cards -->
+                    <div class="month-progress">
+                        <h2>Прогресс по месяцам</h2>
+                        <div class="month-cards">
+                            <div class="month-card" data-month="Октябрь">
+                                <div class="month-card__header">
+                                    <h3>🍂 Октябрь</h3>
+                                    <span class="month-card__count" id="octoberCount">9 задач</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar__fill" id="octoberProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="month-card__stats">
+                                    <span class="difficulty-stat easy">Легко: 9</span>
+                                </div>
+                            </div>
+                            <div class="month-card" data-month="Ноябрь">
+                                <div class="month-card__header">
+                                    <h3>🦋 Ноябрь</h3>
+                                    <span class="month-card__count" id="novemberCount">7 задач</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar__fill" id="novemberProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="month-card__stats">
+                                    <span class="difficulty-stat easy">Легко: 2</span>
+                                    <span class="difficulty-stat medium">Средне: 5</span>
+                                </div>
+                            </div>
+                            <div class="month-card" data-month="Декабрь">
+                                <div class="month-card__header">
+                                    <h3>❄️ Декабрь</h3>
+                                    <span class="month-card__count" id="decemberCount">7 задач</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar__fill" id="decemberProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="month-card__stats">
+                                    <span class="difficulty-stat easy">Легко: 1</span>
+                                    <span class="difficulty-stat medium">Средне: 5</span>
+                                    <span class="difficulty-stat hard">Сложно: 1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gantt Chart -->
+                    <div class="gantt-section">
+                        <h2>График выполнения работ</h2>
+                        <div class="gantt-container">
+                            <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/e49453b8c3ae4e411e5833153a1baaaa/777c9a57-add5-4308-8af3-737de42bd697/1c349487.png" alt="График Ганта - План выполнения учебных работ" class="gantt-chart">
+                        </div>
+                    </div>
+
+                    <!-- Subjects Overview -->
+                    <div class="subjects-overview">
+                        <h2>Предметы</h2>
+                        <div class="subjects-grid" id="subjectsGrid">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks View -->
+                <div class="view view--tasks" id="tasksView">
+                    <div class="tasks-header">
+                        <h2>📋 Список задач</h2>
+                        <div class="tasks-filters">
+                            <select class="form-control" id="monthFilter">
+                                <option value="">Все месяцы</option>
+                                <option value="Октябрь">Октябрь</option>
+                                <option value="Ноябрь">Ноябрь</option>
+                                <option value="Декабрь">Декабрь</option>
+                            </select>
+                            <select class="form-control" id="subjectFilter">
+                                <option value="">Все предметы</option>
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+                            <select class="form-control" id="difficultyFilter">
+                                <option value="">Все уровни</option>
+                                <option value="Легко">Легко</option>
+                                <option value="Средне">Средне</option>
+                                <option value="Сложно">Сложно</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tasks-container" id="tasksContainer">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Calendar View -->
+                <div class="view view--calendar" id="calendarView">
+                    <div class="calendar-header">
+                        <h2>📅 Календарь задач</h2>
+                        <div class="calendar-nav">
+                            <button class="btn btn--outline" id="prevMonth">‹ Предыдущий</button>
+                            <span class="calendar-title" id="calendarTitle">Октябрь 2025</span>
+                            <button class="btn btn--outline" id="nextMonth">Следующий ›</button>
+                        </div>
+                    </div>
+                    <div class="calendar-container" id="calendarContainer">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Progress View -->
+                <div class="view view--progress" id="progressView">
+                    <h2>📈 Анализ прогресса</h2>
+                    <div class="progress-charts">
+                        <div class="chart-container" style="position: relative; height: 400px;">
+                            <canvas id="subjectProgressChart"></canvas>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="difficultyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="motivation-section" id="motivationSection">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Task Modal -->
+        <div class="modal hidden" id="taskModal">
+            <div class="modal__backdrop" id="modalBackdrop"></div>
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h3 id="modalTitle">Редактировать задачу</h3>
+                    <button class="modal__close" id="modalClose">✕</button>
+                </div>
+                <div class="modal__body">
+                    <div class="form-group">
+                        <label class="form-label">Прогресс выполнения</label>
+                        <div class="progress-selector">
+                            <button class="progress-btn" data-progress="0">0%</button>
+                            <button class="progress-btn" data-progress="25">25%</button>
+                            <button class="progress-btn" data-progress="50">50%</button>
+                            <button class="progress-btn" data-progress="75">75%</button>
+                            <button class="progress-btn" data-progress="100">100%</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="taskNotes">Заметки</label>
+                        <textarea class="form-control" id="taskNotes" rows="3" placeholder="Добавьте заметки о выполнении задачи..."></textarea>
+                    </div>
+                </div>
+                <div class="modal__footer">
+                    <button class="btn btn--outline" id="modalCancel">Отмена</button>
+                    <button class="btn btn--primary" id="modalSave">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
