@@ -49,7 +49,9 @@ class StudyPlanner {
         };
 
         this.currentView = 'dashboard';
-        this.currentMonth = new Date(2025, 9); // October 2025
+        this.today = new Date();
+        this.today.setHours(0, 0, 0, 0);
+        this.currentMonth = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
         this.currentTaskId = null;
         this.storageKey = 'studyPlannerState';
 
@@ -162,7 +164,7 @@ class StudyPlanner {
         const totalProgress = this.tasks.reduce((sum, task) => sum + task.progress, 0);
         const averageProgress = total > 0 ? Math.round(totalProgress / total) : 0;
         
-        const currentDate = new Date(2025, 9, 7); // October 7, 2025
+        const currentDate = new Date(this.today);
         const endDate = new Date(2025, 11, 31); // December 31, 2025
         const remainingDays = Math.ceil((endDate - currentDate) / (1000 * 60 * 60 * 24));
 
@@ -374,7 +376,9 @@ class StudyPlanner {
             cell.className = 'calendar-cell';
             
             const isCurrentMonth = currentDate.getMonth() === this.currentMonth.getMonth();
-            const isToday = currentDate.toDateString() === new Date(2025, 9, 7).toDateString();
+            const isToday =
+                currentDate.getDate() === this.today.getDate() &&
+                currentDate.getMonth() === this.today.getMonth();
             
             if (!isCurrentMonth) {
                 cell.classList.add('other-month');
