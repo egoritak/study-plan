@@ -51,6 +51,7 @@ class StudyPlanner {
         this.currentView = 'dashboard';
         this.today = new Date();
         this.today.setHours(0, 0, 0, 0);
+        this.scheduleYear = this.today.getFullYear();
         this.currentMonth = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
         this.currentTaskId = null;
         this.storageKey = 'studyPlannerState';
@@ -165,7 +166,7 @@ class StudyPlanner {
         const averageProgress = total > 0 ? Math.round(totalProgress / total) : 0;
         
         const currentDate = new Date(this.today);
-        const endDate = new Date(2025, 11, 31); // December 31, 2025
+        const endDate = new Date(this.scheduleYear, 11, 31);
         const remainingDays = Math.ceil((endDate - currentDate) / (1000 * 60 * 60 * 24));
 
         return {
@@ -375,10 +376,13 @@ class StudyPlanner {
             const cell = document.createElement('div');
             cell.className = 'calendar-cell';
             
-            const isCurrentMonth = currentDate.getMonth() === this.currentMonth.getMonth();
+            const isCurrentMonth =
+                currentDate.getMonth() === this.currentMonth.getMonth() &&
+                currentDate.getFullYear() === this.currentMonth.getFullYear();
             const isToday =
                 currentDate.getDate() === this.today.getDate() &&
-                currentDate.getMonth() === this.today.getMonth();
+                currentDate.getMonth() === this.today.getMonth() &&
+                currentDate.getFullYear() === this.today.getFullYear();
             
             if (!isCurrentMonth) {
                 cell.classList.add('other-month');
@@ -417,21 +421,8 @@ class StudyPlanner {
 
     getTasksForDate(date) {
         return this.tasks.filter(task => {
-            const segments = task.dates.split('|').map(segment => segment.trim()).filter(Boolean);
-
-            return segments.some(segment => {
-                const [startPart, endPart] = segment.includes('-')
-                    ? segment.split('-').map(part => part.trim())
-                    : [segment, segment];
-
-                const [startDay, startMonth] = startPart.split('.').map(Number);
-                const [endDay, endMonth] = endPart.split('.').map(Number);
-
-                const segmentStart = new Date(2025, startMonth - 1, startDay);
-                const segmentEnd = new Date(2025, endMonth - 1, endDay);
-
-                return date >= segmentStart && date <= segmentEnd;
-            });
+            const segments = this.getTaskSegments(task);
+            return segments.some(({ start, end }) => date >= start && date <= end);
         });
     }
 
@@ -440,10 +431,73 @@ class StudyPlanner {
         this.renderCalendar();
     }
 
+    getTaskSegments(task) {
+        if (!task || !task.dates) {
+            return [];
+        }
+
+        const segments = task.dates
+            .split('|')
+            .map(segment => segment.trim())
+            .filter(Boolean);
+
+        const year = this.scheduleYear;
+
+        return segments.map(segment => {
+            const parts = segment.includes('-')
+                ? segment.split('-').map(part => part.trim())
+                : [segment, segment];
+
+            const [startDay, startMonth] = parts[0].split('.').map(Number);
+            const [endDay, endMonth] = (parts[1] || parts[0]).split('.').map(Number);
+
+            const start = new Date(year, (startMonth || this.currentMonth.getMonth() + 1) - 1, startDay);
+            const end = new Date(year, (endMonth || startMonth) - 1, endDay);
+
+            start.setHours(0, 0, 0, 0);
+            end.setHours(0, 0, 0, 0);
+
+            if (end < start) {
+                end.setFullYear(end.getFullYear() + 1);
+            }
+
+            return { start, end };
+        });
+    }
+
+    getTaskDateRange(task) {
+        const segments = this.getTaskSegments(task);
+        if (segments.length === 0) {
+            return null;
+        }
+
+        return segments.reduce((acc, segment) => {
+            if (!acc) {
+                return { start: segment.start, end: segment.end };
+            }
+
+            const start = segment.start < acc.start ? segment.start : acc.start;
+            const end = segment.end > acc.end ? segment.end : acc.end;
+
+            return { start, end };
+        }, null);
+    }
+
+    formatDate(date) {
+        if (!(date instanceof Date)) {
+            return '';
+        }
+
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        return `${day}.${month}`;
+    }
+
     renderProgressCharts() {
         this.renderSubjectProgressChart();
         this.renderDifficultyChart();
         this.renderMotivationSection();
+        this.renderProgressTaskList();
     }
 
     renderSubjectProgressChart() {
@@ -576,6 +630,87 @@ class StudyPlanner {
                 <p class="motivation-card__message">${motivation.message}</p>
             </div>
         `;
+    }
+
+    renderProgressTaskList() {
+        const container = document.getElementById('progressTaskList');
+        if (!container) {
+            return;
+        }
+
+        const overdue = [];
+        const completed = [];
+
+        this.tasks.forEach(task => {
+            const range = this.getTaskDateRange(task);
+            if (!range) {
+                return;
+            }
+
+            if (task.progress === 100) {
+                completed.push({ task, range });
+            } else if (range.end <= this.today) {
+                overdue.push({ task, range });
+            }
+        });
+
+        overdue.sort((a, b) => a.range.end - b.range.end);
+        completed.sort((a, b) => a.range.end - b.range.end);
+
+        const items = [];
+
+        overdue.forEach(({ task, range }) => {
+            const subject = this.subjects[task.subject] || {};
+            const icon = subject.icon || '📄';
+            const dateText = range.start.getTime() === range.end.getTime()
+                ? this.formatDate(range.end)
+                : `${this.formatDate(range.start)} - ${this.formatDate(range.end)}`;
+
+            items.push(`
+                <div class="progress-task-item overdue">
+                    <div class="progress-task-item__header">
+                        <span class="progress-task-item__subject">${icon} ${task.subject}</span>
+                        <span class="progress-task-item__status">⚠️ Просрочено</span>
+                    </div>
+                    <div class="progress-task-item__task">${task.task}</div>
+                    <div class="progress-task-item__meta">
+                        <span>Дедлайн: ${dateText}</span>
+                        <span>Сложность: ${task.difficulty}</span>
+                    </div>
+                </div>
+            `);
+        });
+
+        completed.forEach(({ task, range }) => {
+            const subject = this.subjects[task.subject] || {};
+            const icon = subject.icon || '📄';
+            const dateText = range.start.getTime() === range.end.getTime()
+                ? this.formatDate(range.end)
+                : `${this.formatDate(range.start)} - ${this.formatDate(range.end)}`;
+
+            items.push(`
+                <div class="progress-task-item completed">
+                    <div class="progress-task-item__header">
+                        <span class="progress-task-item__subject">${icon} ${task.subject}</span>
+                        <span class="progress-task-item__status">✅ Выполнено</span>
+                    </div>
+                    <div class="progress-task-item__task">${task.task}</div>
+                    <div class="progress-task-item__meta">
+                        <span>Дедлайн: ${dateText}</span>
+                        <span>Сложность: ${task.difficulty}</span>
+                    </div>
+                </div>
+            `);
+        });
+
+        const titleHtml = '<h3 class="progress-task-list__title">Список выполненных работ</h3>';
+
+        if (items.length === 0) {
+            container.innerHTML = `${titleHtml}<p class="progress-task-list__empty">Пока нет завершенных задач или просрочек.</p>`;
+            return;
+        }
+
+        container.innerHTML = `${titleHtml}<div class="progress-task-list__items">${items.join('')}</div>`;
     }
 
     openTaskModal(task) {

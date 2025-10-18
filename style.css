@@ -1450,6 +1450,90 @@ select.form-control {
   border-color: var(--color-primary);
 }
 
+.progress-task-list {
+  margin-top: var(--space-32);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.progress-task-list__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text);
+}
+
+.progress-task-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.progress-task-item {
+  padding: var(--space-16);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.progress-task-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-12);
+}
+
+.progress-task-item__subject {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.progress-task-item__status {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.progress-task-item__task {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.progress-task-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.progress-task-item.overdue {
+  border-left: 4px solid rgba(var(--color-warning-rgb), 0.8);
+}
+
+.progress-task-item.overdue .progress-task-item__status {
+  color: var(--color-warning);
+}
+
+.progress-task-item.completed {
+  border-left: 4px solid rgba(var(--color-success-rgb), 0.8);
+}
+
+.progress-task-item.completed .progress-task-item__status {
+  color: var(--color-success);
+}
+
+.progress-task-list__empty {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header__content {
